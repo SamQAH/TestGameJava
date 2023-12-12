@@ -3,8 +3,10 @@ package entitiy;
 import java.awt.image.BufferedImage;
 
 public class Entity {
-    public int x, y;
+    public int worldx, worldy, x, y;
     public int speed;
+
+    public int[] currentChunk;
 
     public String direction;
 

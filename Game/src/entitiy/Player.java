@@ -6,7 +6,6 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -37,8 +36,11 @@ public class Player extends Entity {
     
     // the player's atarting position and movement behaviours
     public void setDefaultValues(){
-        x = 100;
-        y = 100;
+        worldx = 100;
+        worldy = 100;
+        x = (gp.SCREENWIDTH-gp.TILESIZE)/2;
+        y = (gp.SCREENHEIGHT-gp.TILESIZE)/2;
+        currentChunk = new int[]{0,0};
         speed = 5;
         direction = "up";
 
@@ -47,19 +49,19 @@ public class Player extends Entity {
     //determine the state of the player by key inputs
     public void update(){
         if(kh.uppressed){
-            y -= speed;
+            worldy -= speed;
             direction = lastdirection = "up";
         }
         if(kh.downpressed){
-            y += speed;
+            worldy += speed;
             direction = lastdirection = "down";
         }
         if(kh.leftpressed){
-            x -= speed;
+            worldx -= speed;
             direction = lastdirection = "left";
         }
         if(kh.rightpressed){
-            x += speed;
+            worldx += speed;
             direction = lastdirection = "right";
         }
         if(!(kh.uppressed || kh.downpressed || kh.leftpressed || kh.rightpressed)){
@@ -104,16 +106,16 @@ public class Player extends Entity {
     public void getPlayerImage(){
         try{
             //walking animation
-            BufferedImage ss = ImageIO.read(getClass().getResourceAsStream("/sprites/player/playerwalk.png"));
-            String location = new String("src\\sprites\\player\\player.json");
+            BufferedImage ss = ImageIO.read(getClass().getResourceAsStream("/res/player/playerwalk.png"));
+            String location = new String("src/res/player/player.json");
             File file = new File(location);
             String content = new String(Files.readAllBytes(Paths.get(file.toURI())));
             JSONObject playerdata = new JSONObject(content);
             ah = new AnimationHandler(ss, playerdata);
 
             //standing still sprite
-            BufferedImage stillss = ImageIO.read(getClass().getResourceAsStream("/sprites/player/playerstill.png"));
-            location = new String("src\\sprites\\player\\playerstill.json");
+            BufferedImage stillss = ImageIO.read(getClass().getResourceAsStream("/res/player/playerstill.png"));
+            location = new String("src/res/player/playerstill.json");
             file = new File(location);
             content = new String(Files.readAllBytes(Paths.get(file.toURI())));
             JSONObject playerstilldata = new JSONObject(content);
