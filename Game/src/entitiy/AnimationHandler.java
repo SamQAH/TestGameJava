@@ -14,7 +14,7 @@ import java.util.HashMap;
 public class AnimationHandler {
     BufferedImage spritesheet;
 
-
+    HashMap<String,int[]> jsonData;
     HashMap<String,Integer> counter;
 
     JSONObject metadata;
@@ -23,38 +23,43 @@ public class AnimationHandler {
     public AnimationHandler(BufferedImage ss, JSONObject jsonobj){
         spritesheet = ss;
         metadata = jsonobj;
+        jsonData = new HashMap<>();
         counter = new HashMap<>();
         for(String k : metadata.keySet()){
             counter.put(k,0);
+            jsonData.put(k,parseKey(k));
         }
     }
 
     public BufferedImage getCurrentFrame(String key){
-        JSONObject currentdata = metadata.getJSONObject(key);
-        int numberOfFrames = currentdata.getInt("frames");
-        int animationTime = currentdata.getInt("frame delay");
-        int startx = currentdata.getInt("x");
-        int starty = currentdata.getInt("y");
-        int width = currentdata.getInt("width");
-        int height = currentdata.getInt("height");
+
+        int[] currentData = jsonData.get(key);
 
         int counternum = counter.get(key).intValue();
         counternum++;
         counter.replace(key, counternum);
-        BufferedImage image = spritesheet.getSubimage(startx, starty + height * (counternum/animationTime % numberOfFrames), width, height);;
-/* 
-        switch(currentdata.getString("direction")){
-            case "down":
-                image = spritesheet.getSubimage(startx, starty + height * (counternum/animationTime % numberOfFrames), width, height);
-                break;
-            case "right":
-                image = spritesheet.getSubimage(startx + width * (counternum/animationTime % numberOfFrames), starty, width, height);
-                break;
-            default:
-                image = spritesheet.getSubimage(0,0,1,1);
-                System.out.println("unsupported direction of spritesheet animation");
-                break;
-        }*/
+        
+        BufferedImage image = spritesheet.getSubimage(currentData[2], currentData[3] + currentData[5] * (counternum/currentData[1] % currentData[0]), currentData[4], currentData[5]);
         return image;
     }
+
+    public BufferedImage getCurrentFrame(String key, int counter){
+        int[] currentData = jsonData.get(key);
+        BufferedImage image = spritesheet.getSubimage(currentData[2], currentData[3] + currentData[5] * (counter/currentData[1] % currentData[0]), currentData[4], currentData[5]);
+        return image;
+    }
+
+    public int[] parseKey(String key){
+        int[] temp = new int[6];
+
+        JSONObject currentdata = metadata.getJSONObject(key);
+        temp[0]  = currentdata.getInt("frames");
+        temp[1]  = currentdata.getInt("frame delay");
+        temp[2]  = currentdata.getInt("x");
+        temp[3]  = currentdata.getInt("y");
+        temp[4]  = currentdata.getInt("width");
+        temp[5]  = currentdata.getInt("height");
+        return temp;
+    }
+    
 }
