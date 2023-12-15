@@ -14,6 +14,8 @@ import javax.imageio.ImageIO;
 
 import org.json.JSONObject;
 
+import Utility.AnimationHandler;
+import Utility.SpriteHandler;
 import main.GamePanel;
 
 
@@ -69,6 +71,10 @@ public class Player extends Entity {
         }
 
         
+    }
+
+    public int[] getLocalPos(){
+        return new int[]{x,y};
     }
 
     //display the player on graphics 2d

@@ -20,7 +20,7 @@ public class GamePanel extends JPanel implements Runnable{
     public final int TILESIZE = ORIGINALTILESIZE * SCALE;
 
     final int MAXSCREENCOL = 24;
-    final int MAXSCREENROW = 32;
+    final int MAXSCREENROW = 16;
 
     public final int SCREENWIDTH = MAXSCREENCOL * TILESIZE;
     public final int SCREENHEIGHT = MAXSCREENROW * TILESIZE;
@@ -67,7 +67,7 @@ public class GamePanel extends JPanel implements Runnable{
         while(gameThread != null){
             currenttime = System.nanoTime();
             frameFraction += (deltaTime = (currenttime - lasttime)) / frameInterval;
-            chunkcounter += (currenttime - lasttime) / frameInterval;
+            chunkcounter += (currenttime - lasttime) / frameInterval / (60);
             lasttime = currenttime;
 
             if(frameFraction >= 1){
@@ -78,7 +78,7 @@ public class GamePanel extends JPanel implements Runnable{
 
             if(chunkcounter >= 5){
                 cm.updateChunks();
-                System.out.println("update chunk");
+                //System.out.println("update chunk");
                 chunkcounter-=5;
             }
             

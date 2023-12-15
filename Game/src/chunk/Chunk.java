@@ -67,7 +67,7 @@ public class Chunk{
             currentCoord[1] = 0;
 
             while(currentCoord[1]<chunkSize[1]){
-                int num = random.nextInt(7);
+                int num = random.nextInt(20); //writing foliage
                 bufferedWriter.write(num+" ");
                 currentCoord[0]++;
                 if(currentCoord[0] == chunkSize[0]){

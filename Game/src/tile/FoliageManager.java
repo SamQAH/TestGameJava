@@ -14,8 +14,8 @@ import javax.imageio.ImageIO;
 
 import org.json.JSONObject;
 
+import Utility.AnimationHandler;
 import chunk.Chunk;
-import entitiy.AnimationHandler;
 import main.GamePanel;
 
 public class FoliageManager {
@@ -78,10 +78,13 @@ public class FoliageManager {
                 name = "flower 4";
                 break;
                 default:
-                name = "grass 1";
+                name = null;;
                 break;
             }
-            foli[row][col] = new Foliage(ah, name);
+            if(name != null){
+                foli[row][col] = new Foliage(ah.geAnimation(name));
+
+            }
 
         }
 
@@ -106,7 +109,8 @@ public class FoliageManager {
             int screenx = pScreenPos[0]-pWorldPos[0]+worldx;
             int screeny = pScreenPos[1]-pWorldPos[1]+worldy;
 
-            if(screenx>-gp.TILESIZE && screenx<gp.SCREENWIDTH &&
+            if(foli[row][col] != null &&
+                screenx>-gp.TILESIZE && screenx<gp.SCREENWIDTH &&
                 screeny>-gp.TILESIZE && screeny<gp.SCREENHEIGHT ){
                 foli[row][col].draw(g2,screenx,screeny);
             }
