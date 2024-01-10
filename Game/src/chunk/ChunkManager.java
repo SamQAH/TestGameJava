@@ -28,16 +28,15 @@ public class ChunkManager {
         this.updateChunks();
     }
 
-    public void updateChunks(){
+    public synchronized void updateChunks(){
         //find current chunk
-        int[] currentChunk = new int[]{(int)(p.worldx/gp.TILESIZE/Chunk.chunkSize[0]),(int)(p.worldy/gp.TILESIZE/Chunk.chunkSize[1])};
+        int[] currentChunk = new int[]{(int)Math.floor((double)p.worldx/gp.TILESIZE/Chunk.chunkSize[0]),(int)Math.floor((double)p.worldy/gp.TILESIZE/Chunk.chunkSize[1])};
         ArrayList<int[]> loadedChunksID = new ArrayList<>();
         for(int i = -1; i<2;i++){
             for(int j = -1;j<2;j++){
                 loadedChunksID.add(new int[]{currentChunk[0]+i,currentChunk[1]+j});
             }
         }
-
         
 
         /*
@@ -81,11 +80,11 @@ public class ChunkManager {
 
     }
 
-    public void draw(Graphics2D g2){
+    public synchronized void draw(Graphics2D g2){
         for(int[] key : loadedChunks.keySet()){
             Chunk c = loadedChunks.get(key);
             c.draw(g2);
-            
+             
         }
     }
 }
